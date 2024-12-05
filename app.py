@@ -7,5 +7,8 @@ app = Flask(__name__)
 def generate():
     data = request.json
     prompt = data.get('prompt')
+    
+    response = jsonify({"response": "Hello World! I am a parrot, " + prompt})
+    response.headers.add('Access-Control-Allow-Origin', '*')
 
-    return jsonify({"response": "Hello World! I am a parrot, " + prompt})
+    return response
