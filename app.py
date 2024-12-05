@@ -39,5 +39,5 @@ def generate():
         response.headers.add('Access-Control-Allow-Origin', '*')
 
         return response
-    except Exception as e:
-        return e
+    except:
+        return "Error"
