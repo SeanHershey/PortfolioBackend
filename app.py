@@ -19,22 +19,25 @@ def generate():
     data = request.json
     prompt = data.get('prompt')
 
-    response = client.chat.completions.create(
-        model="deepseek-ai/deepseek-coder-33b-instruct",
-        stream=True,
-        max_tokens=1024,
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt},
-        ],
-    )
+    try:
+        response = client.chat.completions.create(
+            model="deepseek-ai/deepseek-coder-33b-instruct",
+            stream=True,
+            max_tokens=1024,
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt},
+            ],
+        )
 
-    text = ""
+        text = ""
 
-    for chunk in response:
-        text = text + chunk.choices[0].delta.content
+        for chunk in response:
+            text = text + chunk.choices[0].delta.content
 
-    response = jsonify({"response": text})
-    response.headers.add('Access-Control-Allow-Origin', '*')
+        response = jsonify({"response": text})
+        response.headers.add('Access-Control-Allow-Origin', '*')
 
-    return response
+        return response
+    except Exception as e:
+        return e
