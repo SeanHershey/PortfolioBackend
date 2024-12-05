@@ -19,22 +19,17 @@ def generate():
     data = request.json
     prompt = data.get('prompt')
 
-    response = client.chat.completions.create(
-        model="EnvyIrys/EnvyIrys_sn111_14",
+    response = client.completions.create(
+        model="deepseek-ai/deepseek-coder-33b-instruct",
         stream=True,
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt},
-        ],
+        prompt=prompt,
     )
 
-    text = ""
-
     for chunk in response:
-        if chunk.choices[0].delta.content is not None:
-            text = text + chunk.choices[0].delta.content
+        if chunk.choices[0].text is not None:
+            print(chunk.choices[0].text, end="")
 
-    response = jsonify({"response": text})
+    response = jsonify({"response": "test complete!"})
     response.headers.add('Access-Control-Allow-Origin', '*')
 
     return response
