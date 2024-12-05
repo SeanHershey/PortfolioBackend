@@ -40,4 +40,4 @@ def generate():
 
         return response
     except:
-        return "Error"
+        return jsonify({"response": "Lost Connection. Try Again Later."})
