@@ -19,17 +19,22 @@ def generate():
     data = request.json
     prompt = data.get('prompt')
 
-    response = client.completions.create(
+    response = client.chat.completions.create(
         model="deepseek-ai/deepseek-coder-33b-instruct",
         stream=True,
-        prompt=prompt,
+        max_tokens=1024,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt},
+        ],
     )
 
-    for chunk in response:
-        if chunk.choices[0].text is not None:
-            print(chunk.choices[0].text, end="")
+    text = ""
 
-    response = jsonify({"response": "test complete!"})
+    for chunk in response:
+        text = text + chunk.choices[0].delta.content
+
+    response = jsonify({"response": text})
     response.headers.add('Access-Control-Allow-Origin', '*')
 
     return response
